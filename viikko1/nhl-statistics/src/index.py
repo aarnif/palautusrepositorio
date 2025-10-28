@@ -1,5 +1,5 @@
 from player_reader import PlayerReader
-from statistics_service import StatisticsService
+from statistics_service import StatisticsService, SortBy
 
 
 def main():
@@ -17,6 +17,23 @@ def main():
 
     print("Top point getters:")
     for player in top_scorers:
+        print(player)
+
+    print()
+    # metodi toimii samalla tavalla kuin yo. kutsu myös ilman toista parametria
+    for player in stats.top(5):
+        print(player)
+
+    print()
+    # järjestetään maalien perusteella
+    print("Top point goal scorers:")
+    for player in stats.top(5, SortBy.GOALS):
+        print(player)
+
+    print()
+    # järjestetään syöttöjen perusteella
+    print("Top by assists:")
+    for player in stats.top(5, SortBy.ASSISTS):
         print(player)
 
 
