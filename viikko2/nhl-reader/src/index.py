@@ -13,9 +13,10 @@ def main():
     print("Players from FIN")
     print()
 
-    for player in players:
-        if player.nationality == "FIN":
-            print(player)
+    finnish_players = list(filter(lambda player: player.nationality == "FIN", players))
+
+    for player in sorted(finnish_players, reverse=True, key=lambda player: player.goals + player.assists):
+        print(player)
 
 
 if __name__ == "__main__":
