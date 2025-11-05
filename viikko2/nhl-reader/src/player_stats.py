@@ -7,5 +7,5 @@ class PlayerStats:
 
         players_by_nationality = list(filter(lambda player: player.nationality == nationality, players))
 
-        return sorted(players_by_nationality, reverse=True, key=lambda player: player.goals + player.assists)
+        return sorted(players_by_nationality, reverse=True, key=lambda player: player.points)
         
