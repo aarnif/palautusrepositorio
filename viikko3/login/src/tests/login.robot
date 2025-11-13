@@ -15,13 +15,13 @@ Login With Incorrect Password
     Set Username  kalle
     Set Password  kalle456
     Click Button  Login
-    Login Should Fail With Message  Invalid username or password
+    Page Should Contain Error  Invalid username or password
 
 Login With Nonexistent Username
     Set Username  nonexistent
     Set Password  kalle123
     Click Button  Login
-    Login Should Fail With Message  Invalid username or password
+    Page Should Contain Error  Invalid username or password
 
 *** Keywords ***
 Login Should Succeed

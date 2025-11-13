@@ -18,28 +18,28 @@ Register With Too Short Username And Valid Password
     Set Password  kalle123
     Set Password Confirmation  kalle123
     Click Button  Register
-    Register Should Fail With Message  Username must be at least 3 characters
+    Page Should Contain Error  Username must be at least 3 characters
 
 Register With Valid Username And Too Short Password
     Set Username  kalle
     Set Password  short
     Set Password Confirmation  short
     Click Button  Register
-    Register Should Fail With Message  Password must be at least 8 characters
+    Page Should Contain Error  Password must be at least 8 characters
 
 Register With Valid Username And Invalid Password
     Set Username  kalle
     Set Password  password
     Set Password Confirmation  password
     Click Button  Register
-    Register Should Fail With Message  Password must include at least one number
+    Page Should Contain Error  Password must include at least one number
 
 Register With Nonmatching Password And Password Confirmation
     Set Username  kalle
     Set Password  kalle123
     Set Password Confirmation  kalle12
     Click Button  Register
-    Register Should Fail With Message  Passwords do not match
+    Page Should Contain Error  Passwords do not match
 
 Register With Username That Is Already In Use
     Create User  kalle  kalle123
@@ -48,28 +48,11 @@ Register With Username That Is Already In Use
     Set Password  kalle123
     Set Password Confirmation  kalle123
     Click Button  Register
-    Register Should Fail With Message  Username already exists
+    Page Should Contain Error  Username already exists
 
 *** Keywords ***
 Register Should Succeed
     Welcome Page Should Be Open
-
-Register Should Fail With Message
-    [Arguments]  ${message}
-    Register Page Should Be Open
-    Page Should Contain  ${message}
-
-Set Username
-    [Arguments]  ${username}
-    Input Text  username  ${username}
-
-Set Password
-    [Arguments]  ${password}
-    Input Password  password  ${password}
-
-Set Password Confirmation
-    [Arguments]  ${password}
-    Input Password  password_confirmation  ${password}
 
 Reset Application And Go To Register Page
     Reset Application
