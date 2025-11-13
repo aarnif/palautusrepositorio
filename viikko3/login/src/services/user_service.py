@@ -45,6 +45,9 @@ class UserService:
         
         if len(password) < 8:
             raise UserInputError("Password must be at least 8 characters")
+        
+        if not any(c.isdigit() for c in password):
+            raise UserInputError("Password must include at least one number")
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
 
