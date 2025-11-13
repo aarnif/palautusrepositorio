@@ -42,7 +42,13 @@ Register With Nonmatching Password And Password Confirmation
     Register Should Fail With Message  Passwords do not match
 
 Register With Username That Is Already In Use
-#
+    Create User  kalle  kalle123
+    Go To Register Page
+    Set Username  kalle
+    Set Password  kalle123
+    Set Password Confirmation  kalle123
+    Click Button  Register
+    Register Should Fail With Message  Username already exists
 
 *** Keywords ***
 Register Should Succeed

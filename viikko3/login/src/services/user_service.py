@@ -51,6 +51,10 @@ class UserService:
         
         if password != password_confirmation:
             raise UserInputError("Passwords do not match")
+        
+        if self._user_repository.find_by_username(username):
+            raise UserInputError("Username already exists")
+
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
 
