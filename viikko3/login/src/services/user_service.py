@@ -48,6 +48,9 @@ class UserService:
         
         if not any(c.isdigit() for c in password):
             raise UserInputError("Password must include at least one number")
+        
+        if password != password_confirmation:
+            raise UserInputError("Passwords do not match")
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
 

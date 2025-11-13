@@ -35,7 +35,11 @@ Register With Valid Username And Invalid Password
     Register Should Fail With Message  Password must include at least one number
 
 Register With Nonmatching Password And Password Confirmation
-# ...
+    Set Username  kalle
+    Set Password  kalle123
+    Set Password Confirmation  kalle12
+    Click Button  Register
+    Register Should Fail With Message  Passwords do not match
 
 Register With Username That Is Already In Use
 #
