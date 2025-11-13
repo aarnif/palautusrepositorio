@@ -4,3 +4,6 @@ __pycache__/
 htmlcov/
 .coverage
 .DS_Store
+log.html
+report.html
+output.xml
