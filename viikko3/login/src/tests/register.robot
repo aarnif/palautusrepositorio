@@ -21,7 +21,11 @@ Register With Too Short Username And Valid Password
     Register Should Fail With Message  Username must be at least 3 characters
 
 Register With Valid Username And Too Short Password
-# ...
+    Set Username  kalle
+    Set Password  short
+    Set Password Confirmation  short
+    Click Button  Register
+    Register Should Fail With Message  Password must be at least 8 characters
 
 Register With Valid Username And Invalid Password
 # salasana ei sisällä halutunlaisia merkkejä
