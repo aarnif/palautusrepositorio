@@ -8,10 +8,7 @@ from tuote import Tuote
 class TestKauppa(unittest.TestCase):
     def setUp(self):
         self.pankki_mock = Mock()
-        self.viitegeneraattori_mock = Mock()
-
-        # palautetaan aina arvo 42
-        self.viitegeneraattori_mock.uusi.return_value = 42
+        self.viitegeneraattori_mock = Mock(wraps=Viitegeneraattori())
 
         self.varasto_mock = Mock()
 
@@ -57,7 +54,7 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         # varmistetaan, että metodia tilisiirto on kutsuttu
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 2, "12345", "33333-44455", 5)
 
     def test_kahden_eri_tuotteen_ostaminen_onnistuu(self):
         # tehdään ostokset
@@ -67,7 +64,7 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         # varmistetaan, että metodia tilisiirto on kutsuttu
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 11)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 2, "12345", "33333-44455", 11)
 
     def test_kahden_saman_tuotteen_ostaminen_onnistuu(self):
         # tehdään ostokset
@@ -77,7 +74,7 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         # varmistetaan, että metodia tilisiirto on kutsuttu
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 10)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 2, "12345", "33333-44455", 10)
 
     def test_tuotteen_jonka_saldo_on_nolla_ei_lisata_koriin(self):
         # tehdään ostokset
@@ -87,7 +84,7 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         # varmistetaan, että metodia tilisiirto on kutsuttu
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 2, "12345", "33333-44455", 5)
 
         
     def test_ostoskori_nollataan_ostosten_välillä(self):
@@ -98,10 +95,10 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("pekka", "12345")
 
         # varmistetaan, että metodia tilisiirto on kutsuttu
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 10)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 2, "12345", "33333-44455", 10)
 
         self.kauppa.aloita_asiointi()
         self.kauppa.lisaa_koriin(1)
         self.kauppa.tilimaksu("pekka", "12345")
 
-        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 3, "12345", "33333-44455", 5)
