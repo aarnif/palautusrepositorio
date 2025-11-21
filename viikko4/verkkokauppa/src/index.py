@@ -31,6 +31,10 @@ def main():
     for _ in range(0, 40):
         kauppa.lisaa_koriin(3)
 
+    for _ in range(0, 40):
+        kauppa.lisaa_koriin(4)
+
+
     # kirjanpito
     for tapahtuma in kirjanpito.tapahtumat:
         print(tapahtuma)
