@@ -28,6 +28,9 @@ def main():
     # seuraava asiakas
     kauppa.aloita_asiointi()
 
+    for _ in range(0, 40):
+        kauppa.lisaa_koriin(3)
+
     # kirjanpito
     for tapahtuma in kirjanpito.tapahtumat:
         print(tapahtuma)
