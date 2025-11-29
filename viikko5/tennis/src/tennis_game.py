@@ -22,7 +22,7 @@ class TennisGame:
         else:
             self.player2_points = self.player2_points + 1
 
-    def get_even_points_score(self):
+    def _get_even_points_score(self):
         if self.player1_points == SCORE.LOVE.value:
             return "Love-All"
         if self.player1_points == SCORE.FIFTEEN.value:
@@ -32,7 +32,7 @@ class TennisGame:
 
         return "Deuce"
 
-    def get_beyond_deuce_score(self):
+    def _get_beyond_deuce_score(self):
         points_difference = self.player1_points - self.player2_points
 
         if points_difference == 1:
@@ -54,16 +54,16 @@ class TennisGame:
 
         return "Forty"
 
-    def get_before_deuce_score(self):
+    def _get_before_deuce_score(self):
         player1_score = self._get_score_name(self.player1_points)
         player2_score = self._get_score_name(self.player2_points)
         return f"{player1_score}-{player2_score}"
 
     def get_score(self):
         if self.player1_points == self.player2_points:
-            return self.get_even_points_score()
+            return self._get_even_points_score()
 
         if self.player1_points >= SCORE.GAME.value or self.player2_points >= SCORE.GAME.value:
-            return self.get_beyond_deuce_score()
+            return self._get_beyond_deuce_score()
 
-        return self.get_before_deuce_score()
+        return self._get_before_deuce_score()
