@@ -11,20 +11,25 @@ class TennisGame:
         else:
             self.player2_points = self.player2_points + 1
 
+    def get_even_points_score(self, score):
+        if self.player1_points == 0:
+            score = "Love-All"
+        elif self.player1_points == 1:
+            score = "Fifteen-All"
+        elif self.player1_points == 2:
+            score = "Thirty-All"
+        else:
+            score = "Deuce"
+        return score
+
     def get_score(self):
         score = ""
         temp_score = 0
 
         if self.player1_points == self.player2_points:
-            if self.player1_points == 0:
-                score = "Love-All"
-            elif self.player1_points == 1:
-                score = "Fifteen-All"
-            elif self.player1_points == 2:
-                score = "Thirty-All"
-            else:
-                score = "Deuce"
-        elif self.player1_points >= 4 or self.player2_points >= 4:
+            return self.get_even_points_score(score)
+
+        if self.player1_points >= 4 or self.player2_points >= 4:
             minus_result = self.player1_points - self. player2_points
 
             if minus_result == 1:
