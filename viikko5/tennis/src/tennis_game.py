@@ -33,19 +33,17 @@ class TennisGame:
             score = "Deuce"
         return score
 
-    def get_beyond_deuce_score(self, score):
+    def get_beyond_deuce_score(self):
         points_difference = self.player1_points - self.player2_points
 
         if points_difference == 1:
-            score = "Advantage player1"
-        elif points_difference == -1:
-            score = "Advantage player2"
-        elif points_difference >= 2:
-            score = "Win for player1"
-        else:
-            score = "Win for player2"
+            return f"Advantage {self.player1_name}"
+        if points_difference == -1:
+            return f"Advantage {self.player2_name}"
+        if points_difference >= 2:
+            return f"Win for {self.player1_name}"
 
-        return score
+        return f"Win for {self.player2_name}"
 
     def get_before_deuce_score(self, score):
         temp_score = 0
@@ -74,6 +72,6 @@ class TennisGame:
             return self.get_even_points_score(score)
 
         if self.player1_points >= SCORE.GAME.value or self.player2_points >= SCORE.GAME.value:
-            return self.get_beyond_deuce_score(score)
+            return self.get_beyond_deuce_score()
 
         return self.get_before_deuce_score(score)
