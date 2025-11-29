@@ -36,16 +36,8 @@ class TennisGame:
 
         return score
 
-    def get_score(self):
-        score = ""
+    def get_before_deuce_score(self, score):
         temp_score = 0
-
-        if self.player1_points == self.player2_points:
-            return self.get_even_points_score(score)
-
-        if self.player1_points >= 4 or self.player2_points >= 4:
-            return self.get_beyond_deuce_score(score)
-
         for i in range(1, 3):
             if i == 1:
                 temp_score = self.player1_points
@@ -63,3 +55,14 @@ class TennisGame:
                 score = score + "Forty"
 
         return score
+
+    def get_score(self):
+        score = ""
+
+        if self.player1_points == self.player2_points:
+            return self.get_even_points_score(score)
+
+        if self.player1_points >= 4 or self.player2_points >= 4:
+            return self.get_beyond_deuce_score(score)
+
+        return self.get_before_deuce_score(score)
