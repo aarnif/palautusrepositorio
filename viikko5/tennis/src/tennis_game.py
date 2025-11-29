@@ -1,55 +1,66 @@
+from enum import Enum
+
+
+class SCORE(Enum):
+    LOVE = 0
+    FIFTEEN = 1
+    THIRTY = 2
+    FORTY = 3
+    GAME = 4
+
+
 class TennisGame:
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
-        self.m_score1 = 0
-        self.m_score2 = 0
+        self.player1_score = 0
+        self.player2_score = 0
 
     def won_point(self, player_name):
-        if player_name == "player1":
-            self.m_score1 = self.m_score1 + 1
+        if player_name == self.player1_name:
+            self.player1_score = self.player1_score + 1
         else:
-            self.m_score2 = self.m_score2 + 1
+            self.player2_score = self.player2_score + 1
+
+    def _get_tied_score(self):
+        if self.player1_score == SCORE.LOVE.value:
+            return "Love-All"
+        if self.player1_score == SCORE.FIFTEEN.value:
+            return "Fifteen-All"
+        if self.player1_score == SCORE.THIRTY.value:
+            return "Thirty-All"
+        return "Deuce"
+
+    def _get_advantage_or_win_score(self):
+        score_difference = self.player1_score - self.player2_score
+
+        if score_difference == 1:
+            return f"Advantage {self.player1_name}"
+        if score_difference == -1:
+            return f"Advantage {self.player2_name}"
+        if score_difference >= 2:
+            return f"Win for {self.player1_name}"
+        return f"Win for {self.player2_name}"
+
+    def _point_to_score_name(self, points):
+        if points == SCORE.LOVE.value:
+            return "Love"
+        if points == SCORE.FIFTEEN.value:
+            return "Fifteen"
+        if points == SCORE.THIRTY.value:
+            return "Thirty"
+        return "Forty"
+
+    def _get_uneven_score(self):
+        player1_score_name = self._point_to_score_name(self.player1_score)
+        player2_score_name = self._point_to_score_name(self.player2_score)
+        return f"{player1_score_name}-{player2_score_name}"
 
     def get_score(self):
-        score = ""
-        temp_score = 0
+        if self.player1_score == self.player2_score:
+            return self._get_tied_score()
 
-        if self.m_score1 == self.m_score2:
-            if self.m_score1 == 0:
-                score = "Love-All"
-            elif self.m_score1 == 1:
-                score = "Fifteen-All"
-            elif self.m_score1 == 2:
-                score = "Thirty-All"
-            else:
-                score = "Deuce"
-        elif self.m_score1 >= 4 or self.m_score2 >= 4:
-            minus_result = self.m_score1 - self. m_score2
+        if self.player1_score >= SCORE.GAME.value or self.player2_score >= SCORE.GAME.value:
+            return self._get_advantage_or_win_score()
 
-            if minus_result == 1:
-                score = "Advantage player1"
-            elif minus_result == -1:
-                score = "Advantage player2"
-            elif minus_result >= 2:
-                score = "Win for player1"
-            else:
-                score = "Win for player2"
-        else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.m_score1
-                else:
-                    score = score + "-"
-                    temp_score = self.m_score2
-
-                if temp_score == 0:
-                    score = score + "Love"
-                elif temp_score == 1:
-                    score = score + "Fifteen"
-                elif temp_score == 2:
-                    score = score + "Thirty"
-                elif temp_score == 3:
-                    score = score + "Forty"
-
-        return score
+        return self._get_uneven_score()
