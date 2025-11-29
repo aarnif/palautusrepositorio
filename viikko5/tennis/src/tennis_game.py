@@ -44,25 +44,20 @@ class TennisGame:
 
         return f"Win for {self.player2_name}"
 
-    def get_before_deuce_score(self, score):
-        temp_score = 0
-        for i in range(SCORE.FIFTEEN.value, SCORE.FORTY.value):
-            if i == 1:
-                temp_score = self.player1_points
-            else:
-                score = score + "-"
-                temp_score = self.player2_points
+    def _get_score_name(self, points):
+        if points == SCORE.LOVE.value:
+            return "Love"
+        if points == SCORE.FIFTEEN.value:
+            return "Fifteen"
+        if points == SCORE.THIRTY.value:
+            return "Thirty"
 
-            if temp_score == SCORE.LOVE.value:
-                score = score + "Love"
-            elif temp_score == SCORE.FIFTEEN.value:
-                score = score + "Fifteen"
-            elif temp_score == SCORE.THIRTY.value:
-                score = score + "Thirty"
-            elif temp_score == SCORE.FORTY.value:
-                score = score + "Forty"
+        return "Forty"
 
-        return score
+    def get_before_deuce_score(self):
+        player1_score = self._get_score_name(self.player1_points)
+        player2_score = self._get_score_name(self.player2_points)
+        return f"{player1_score}-{player2_score}"
 
     def get_score(self):
         score = ""
@@ -73,4 +68,4 @@ class TennisGame:
         if self.player1_points >= SCORE.GAME.value or self.player2_points >= SCORE.GAME.value:
             return self.get_beyond_deuce_score()
 
-        return self.get_before_deuce_score(score)
+        return self.get_before_deuce_score()
