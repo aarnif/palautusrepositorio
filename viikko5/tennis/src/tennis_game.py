@@ -1,3 +1,14 @@
+from enum import Enum
+
+
+class SCORE(Enum):
+    LOVE = 0
+    FIFTEEN = 1
+    THIRTY = 2
+    FORTY = 3
+    GAME = 4
+
+
 class TennisGame:
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
@@ -12,11 +23,11 @@ class TennisGame:
             self.player2_points = self.player2_points + 1
 
     def get_even_points_score(self, score):
-        if self.player1_points == 0:
+        if self.player1_points == SCORE.LOVE.value:
             score = "Love-All"
-        elif self.player1_points == 1:
+        elif self.player1_points == SCORE.FIFTEEN.value:
             score = "Fifteen-All"
-        elif self.player1_points == 2:
+        elif self.player1_points == SCORE.THIRTY.value:
             score = "Thirty-All"
         else:
             score = "Deuce"
@@ -38,20 +49,20 @@ class TennisGame:
 
     def get_before_deuce_score(self, score):
         temp_score = 0
-        for i in range(1, 3):
+        for i in range(SCORE.FIFTEEN.value, SCORE.FORTY.value):
             if i == 1:
                 temp_score = self.player1_points
             else:
                 score = score + "-"
                 temp_score = self.player2_points
 
-            if temp_score == 0:
+            if temp_score == SCORE.LOVE.value:
                 score = score + "Love"
-            elif temp_score == 1:
+            elif temp_score == SCORE.FIFTEEN.value:
                 score = score + "Fifteen"
-            elif temp_score == 2:
+            elif temp_score == SCORE.THIRTY.value:
                 score = score + "Thirty"
-            elif temp_score == 3:
+            elif temp_score == SCORE.FORTY.value:
                 score = score + "Forty"
 
         return score
@@ -62,7 +73,7 @@ class TennisGame:
         if self.player1_points == self.player2_points:
             return self.get_even_points_score(score)
 
-        if self.player1_points >= 4 or self.player2_points >= 4:
+        if self.player1_points >= SCORE.GAME.value or self.player2_points >= SCORE.GAME.value:
             return self.get_beyond_deuce_score(score)
 
         return self.get_before_deuce_score(score)
