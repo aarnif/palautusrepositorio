@@ -23,13 +23,13 @@ class TennisGame:
         return score
 
     def get_beyond_deuce_score(self, score):
-        minus_result = self.player1_points - self. player2_points
+        points_difference = self.player1_points - self.player2_points
 
-        if minus_result == 1:
+        if points_difference == 1:
             score = "Advantage player1"
-        elif minus_result == -1:
+        elif points_difference == -1:
             score = "Advantage player2"
-        elif minus_result >= 2:
+        elif points_difference >= 2:
             score = "Win for player1"
         else:
             score = "Win for player2"
