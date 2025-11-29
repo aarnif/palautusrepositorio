@@ -22,6 +22,20 @@ class TennisGame:
             score = "Deuce"
         return score
 
+    def get_beyond_deuce_score(self, score):
+        minus_result = self.player1_points - self. player2_points
+
+        if minus_result == 1:
+            score = "Advantage player1"
+        elif minus_result == -1:
+            score = "Advantage player2"
+        elif minus_result >= 2:
+            score = "Win for player1"
+        else:
+            score = "Win for player2"
+
+        return score
+
     def get_score(self):
         score = ""
         temp_score = 0
@@ -30,31 +44,22 @@ class TennisGame:
             return self.get_even_points_score(score)
 
         if self.player1_points >= 4 or self.player2_points >= 4:
-            minus_result = self.player1_points - self. player2_points
+            return self.get_beyond_deuce_score(score)
 
-            if minus_result == 1:
-                score = "Advantage player1"
-            elif minus_result == -1:
-                score = "Advantage player2"
-            elif minus_result >= 2:
-                score = "Win for player1"
+        for i in range(1, 3):
+            if i == 1:
+                temp_score = self.player1_points
             else:
-                score = "Win for player2"
-        else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.player1_points
-                else:
-                    score = score + "-"
-                    temp_score = self.player2_points
+                score = score + "-"
+                temp_score = self.player2_points
 
-                if temp_score == 0:
-                    score = score + "Love"
-                elif temp_score == 1:
-                    score = score + "Fifteen"
-                elif temp_score == 2:
-                    score = score + "Thirty"
-                elif temp_score == 3:
-                    score = score + "Forty"
+            if temp_score == 0:
+                score = score + "Love"
+            elif temp_score == 1:
+                score = score + "Fifteen"
+            elif temp_score == 2:
+                score = score + "Thirty"
+            elif temp_score == 3:
+                score = score + "Forty"
 
         return score
