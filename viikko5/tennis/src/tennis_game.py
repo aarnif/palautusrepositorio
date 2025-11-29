@@ -60,8 +60,6 @@ class TennisGame:
         return f"{player1_score}-{player2_score}"
 
     def get_score(self):
-        score = ""
-
         if self.player1_points == self.player2_points:
             return self.get_even_points_score()
 
