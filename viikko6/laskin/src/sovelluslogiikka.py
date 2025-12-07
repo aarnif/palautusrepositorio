@@ -26,7 +26,8 @@ class Summa:
 
     def suorita(self):
         self._edellinen_arvo = self._sovelluslogiikka.arvo()
-        arvo = int(self._operandi())
+        syote = self._operandi()
+        arvo = int(syote) if syote else 0
         self._sovelluslogiikka.plus(arvo)
 
     def kumoa(self):
@@ -41,7 +42,8 @@ class Erotus:
 
     def suorita(self):
         self._edellinen_arvo = self._sovelluslogiikka.arvo()
-        arvo = int(self._operandi())
+        syote = self._operandi()
+        arvo = int(syote) if syote else 0
         self._sovelluslogiikka.miinus(arvo)
 
     def kumoa(self):
