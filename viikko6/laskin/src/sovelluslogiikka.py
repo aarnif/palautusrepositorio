@@ -16,3 +16,32 @@ class Sovelluslogiikka:
 
     def arvo(self):
         return self._arvo
+
+
+class Summa:
+    def __init__(self, sovelluslogiikka, operandi):
+        self._sovelluslogiikka = sovelluslogiikka
+        self._operandi = operandi
+
+    def suorita(self):
+        arvo = int(self._operandi())
+        self._sovelluslogiikka.plus(arvo)
+
+
+class Erotus:
+    def __init__(self, sovelluslogiikka, operandi):
+        self._sovelluslogiikka = sovelluslogiikka
+        self._operandi = operandi
+
+    def suorita(self):
+        arvo = int(self._operandi())
+        self._sovelluslogiikka.miinus(arvo)
+
+
+class Nollaus:
+    def __init__(self, sovelluslogiikka, operandi):
+        self._sovelluslogiikka = sovelluslogiikka
+        self._operandi = operandi
+
+    def suorita(self):
+        self._sovelluslogiikka.nollaa()
