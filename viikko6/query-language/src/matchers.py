@@ -22,6 +22,17 @@ class Not:
         return True
 
 
+class All:
+    def __init__(self, *matchers):
+        self._matchers = matchers
+
+    def test(self, player):
+        if not self._matchers:
+            return True
+
+        return all(matcher.test(player) for matcher in self._matchers)
+
+
 class PlaysIn:
     def __init__(self, team):
         self._team = team

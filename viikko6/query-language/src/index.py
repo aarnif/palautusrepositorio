@@ -1,6 +1,6 @@
 from statistics import Statistics
 from player_reader import PlayerReader
-from matchers import And, Not, HasAtLeast, PlaysIn
+from matchers import And, Not, All, HasAtLeast, PlaysIn
 
 
 def main():
@@ -21,6 +21,9 @@ def main():
 
     for player in stats.matches(matcher):
         print(player)
+
+    filtered_with_all = stats.matches(All())
+    print(len(filtered_with_all))  # 899
 
 
 if __name__ == "__main__":
