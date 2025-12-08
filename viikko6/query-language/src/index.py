@@ -10,7 +10,8 @@ def main():
 
     query = QueryBuilder()
 
-    matcher = query.plays_in("NYR").build()
+    matcher = query.plays_in("NYR").has_at_least(
+        10, "goals").build()
 
     for player in stats.matches(matcher):
         print(player)
