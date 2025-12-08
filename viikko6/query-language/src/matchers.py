@@ -22,6 +22,14 @@ class Not:
         return True
 
 
+class Or:
+    def __init__(self, *matchers):
+        self._matchers = matchers
+
+    def test(self, player):
+        return any(matcher.test(player) for matcher in self._matchers)
+
+
 class All:
     def __init__(self, *matchers):
         self._matchers = matchers
