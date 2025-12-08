@@ -35,9 +35,6 @@ class All:
         self._matchers = matchers
 
     def test(self, player):
-        if not self._matchers:
-            return True
-
         return all(matcher.test(player) for matcher in self._matchers)
 
 
