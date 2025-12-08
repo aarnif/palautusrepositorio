@@ -13,3 +13,6 @@ class QueryBuilder:
 
     def has_at_least(self, number, stat):
         return QueryBuilder(And(self._matcher, HasAtLeast(number, stat)))
+
+    def has_fewer_than(self, number, stat):
+        return QueryBuilder(And(self._matcher, HasFewerThan(number, stat)))
