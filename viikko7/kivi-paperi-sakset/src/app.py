@@ -38,6 +38,8 @@ def new_game():
         'tasapelit': 0
     }
     session['game_history'] = []
+    session['game_over'] = False
+    session['winner'] = None
     # Initialize AI state
     if game_type == 'b':
         session['ai_state'] = {'siirto': 0}
@@ -52,6 +54,10 @@ def play():
     game_type = get_or_create_game()
     if game_type is None:
         return redirect(url_for('index'))
+
+    # Check if game is over
+    if session.get('game_over', False):
+        return redirect(url_for('game_over'))
 
     game_type_names = {
         'a': 'Pelaaja vastaan Pelaaja',
@@ -175,7 +181,41 @@ def make_move():
     session['game_history'] = history
     session.modified = True
 
+    # Check if game is over (5 wins)
+    if tuomari.ekan_pisteet >= 5:
+        session['game_over'] = True
+        session['winner'] = 'player1'
+        return redirect(url_for('game_over'))
+    elif tuomari.tokan_pisteet >= 5:
+        session['game_over'] = True
+        session['winner'] = 'player2'
+        return redirect(url_for('game_over'))
+
     return redirect(url_for('play'))
+
+
+@app.route('/game_over')
+def game_over():
+    if 'game_type' not in session or not session.get('game_over', False):
+        return redirect(url_for('index'))
+
+    game_type = session['game_type']
+    game_type_names = {
+        'a': 'Pelaaja vastaan Pelaaja',
+        'b': 'Pelaaja vastaan Tekoäly',
+        'c': 'Pelaaja vastaan Parannettu Tekoäly'
+    }
+
+    winner = session.get('winner')
+    tuomari_data = session.get('tuomari', {})
+    history = session.get('game_history', [])
+
+    return render_template('game_over.html',
+                           game_type=game_type,
+                           game_type_name=game_type_names.get(game_type, ''),
+                           winner=winner,
+                           tuomari=tuomari_data,
+                           history=history)
 
 
 @app.route('/reset')

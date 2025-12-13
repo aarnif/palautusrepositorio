@@ -294,3 +294,133 @@ class TestGameLogic:
             'player2_move': 'p'
         }, follow_redirects=True)
         assert b'Pelaaja 1:</strong> 1' in response.data
+
+
+class TestGameOver:
+    def test_game_ends_when_player1_gets_5_wins(self, client):
+        """Test that game ends when player 1 reaches 5 wins."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 1 wins 5 times (k beats s)
+        for _ in range(5):
+            response = client.post('/make_move', data={
+                'player1_move': 'k',
+                'player2_move': 's'
+            }, follow_redirects=True)
+
+        # Should be redirected to game over page
+        assert response.status_code == 200
+        data = response.data.decode('utf-8')
+        assert 'Peli Päättyi' in data or 'Voitti' in data
+
+    def test_game_ends_when_player2_gets_5_wins(self, client):
+        """Test that game ends when player 2 reaches 5 wins."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 2 wins 5 times (p beats k)
+        for _ in range(5):
+            response = client.post('/make_move', data={
+                'player1_move': 'k',
+                'player2_move': 'p'
+            }, follow_redirects=True)
+
+        # Should be redirected to game over page
+        assert response.status_code == 200
+        data = response.data.decode('utf-8')
+        assert 'Peli Päättyi' in data or 'Voitti' in data
+
+    def test_game_continues_before_5_wins(self, client):
+        """Test that game continues when no player has 5 wins."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 1 wins 4 times
+        for _ in range(4):
+            response = client.post('/make_move', data={
+                'player1_move': 'k',
+                'player2_move': 's'
+            }, follow_redirects=True)
+
+        # Should still be on play page
+        data = response.data.decode('utf-8')
+        assert 'Valitse siirtosi' in data
+        assert 'Peli Päättyi' not in data
+
+    def test_game_over_page_shows_winner(self, client):
+        """Test that game over page shows the correct winner."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 1 wins 5 times
+        for _ in range(5):
+            client.post('/make_move', data={
+                'player1_move': 'k',
+                'player2_move': 's'
+            }, follow_redirects=True)
+
+        # Check game over page content
+        response = client.get('/game_over')
+        data = response.data.decode('utf-8')
+        assert 'Pelaaja 1 Voitti' in data
+
+    def test_game_over_shows_final_scores(self, client):
+        """Test that game over page shows final scores."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 1 wins 5 times, player 2 wins 2 times, 1 tie
+        for _ in range(5):
+            client.post(
+                '/make_move', data={'player1_move': 'k', 'player2_move': 's'})
+        for _ in range(2):
+            client.post(
+                '/make_move', data={'player1_move': 'k', 'player2_move': 'p'})
+        client.post(
+            '/make_move', data={'player1_move': 'k', 'player2_move': 'k'})
+
+        response = client.get('/game_over', follow_redirects=True)
+        data = response.data.decode('utf-8')
+        assert 'Lopulliset Pisteet' in data or 'Pisteet' in data
+
+    def test_cannot_play_after_game_over(self, client):
+        """Test that play page redirects to game over after game ends."""
+        client.post('/new_game', data={'game_type': 'a'})
+
+        # Player 1 wins 5 times
+        for _ in range(5):
+            client.post(
+                '/make_move', data={'player1_move': 'k', 'player2_move': 's'})
+
+        # Try to access play page
+        response = client.get('/play', follow_redirects=True)
+        data = response.data.decode('utf-8')
+        assert 'Peli Päättyi' in data or 'Voitti' in data
+
+    def test_play_again_same_game_type(self, client):
+        """Test playing again with same game type after game over."""
+        client.post('/new_game', data={'game_type': 'b'})
+
+        # Complete a game (5 wins for player 1)
+        for _ in range(5):
+            client.post('/make_move', data={'player1_move': 'k'})
+
+        # Start a new game of the same type
+        response = client.post(
+            '/new_game', data={'game_type': 'b'}, follow_redirects=True)
+
+        # Should be on play page with new game
+        assert response.status_code == 200
+        data = response.data.decode('utf-8')
+        assert 'Valitse siirtosi' in data
+
+    def test_ai_game_ends_at_5_wins(self, client):
+        """Test that AI games also end at 5 wins."""
+        client.post('/new_game', data={'game_type': 'b'})
+
+        # Play until someone gets 5 wins
+        for _ in range(20):  # Max rounds to prevent infinite loop
+            response = client.post(
+                '/make_move', data={'player1_move': 'k'}, follow_redirects=True)
+            data = response.data.decode('utf-8')
+            if 'Peli Päättyi' in data or 'Voitti' in data:
+                break
+
+        # Game should have ended
+        assert 'Voitti' in data or 'Peli Päättyi' in data

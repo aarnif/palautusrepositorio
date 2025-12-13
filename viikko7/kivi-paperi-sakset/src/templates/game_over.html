@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peli Päättyi - Kivi Paperi Sakset</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .winner-announcement {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 30px 0;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      .winner-announcement .trophy {
+        font-size: 60px;
+        margin-bottom: 10px;
+      }
+      .game-info {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #e3f2fd;
+        border-radius: 5px;
+      }
+      .final-score {
+        text-align: center;
+        font-size: 20px;
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #fff3e0;
+        border-radius: 5px;
+      }
+      .final-score h2 {
+        margin-top: 0;
+        color: #f57c00;
+      }
+      .history {
+        margin-top: 30px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .history-item {
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #f9f9f9;
+        border-left: 3px solid #4caf50;
+        border-radius: 3px;
+      }
+      .buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      .btn {
+        padding: 15px 40px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+      }
+      .btn-primary {
+        background-color: #4caf50;
+      }
+      .btn-primary:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background-color: #2196f3;
+      }
+      .btn-secondary:hover {
+        background-color: #0b7dda;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎮 Peli Päättyi!</h1>
+
+      <div class="game-info">
+        <h2>{{ game_type_name }}</h2>
+      </div>
+
+      <div class="winner-announcement">
+        <div class="trophy">🏆</div>
+        {% if winner == 'player1' %}
+        <div>Pelaaja 1 Voitti!</div>
+        {% else %} {% if game_type == 'a' %}
+        <div>Pelaaja 2 Voitti!</div>
+        {% else %}
+        <div>Tekoäly Voitti!</div>
+        {% endif %} {% endif %}
+      </div>
+
+      <div class="final-score">
+        <h2>Lopulliset Pisteet</h2>
+        <p style="font-size: 22px">
+          <strong>Pelaaja 1:</strong> {{ tuomari.ekan_pisteet }} |
+          <strong
+            >{% if game_type == 'a' %}Pelaaja 2{% else %}Tekoäly{% endif
+            %}:</strong
+          >
+          {{ tuomari.tokan_pisteet }}
+        </p>
+        <p><strong>Tasapelit:</strong> {{ tuomari.tasapelit }}</p>
+      </div>
+
+      {% if history %}
+      <div class="history">
+        <h3 style="text-align: center">Pelihistoria</h3>
+        {% for move in history %}
+        <div class="history-item">
+          <strong>Kierros {{ loop.index }}:</strong>
+          Pelaaja 1: {{ move.player1 }} ({{ move.player1_raw }}) vs {% if
+          game_type == 'a' %}Pelaaja 2{% else %}Tekoäly{% endif %}: {{
+          move.player2 }} ({{ move.player2_raw }})
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="buttons">
+        <a href="/reset" class="btn btn-primary">Palaa Alkuun</a>
+        <form action="/new_game" method="POST" style="display: inline">
+          <input type="hidden" name="game_type" value="{{ game_type }}" />
+          <button type="submit" class="btn btn-secondary">
+            Pelaa Uudelleen
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
