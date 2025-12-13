@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kivi Paperi Sakset</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .game-options {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30px;
+      }
+      button {
+        padding: 15px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .description {
+        text-align: center;
+        color: #666;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🪨 📄 ✂️ Kivi Paperi Sakset</h1>
+      <p class="description">Valitse pelityyppi aloittaaksesi</p>
+
+      <div class="game-options">
+        <form action="/new_game" method="POST">
+          <input type="hidden" name="game_type" value="a" />
+          <button type="submit">Pelaaja vastaan Pelaaja</button>
+        </form>
+
+        <form action="/new_game" method="POST">
+          <input type="hidden" name="game_type" value="b" />
+          <button type="submit">Pelaaja vastaan Tekoäly</button>
+        </form>
+
+        <form action="/new_game" method="POST">
+          <input type="hidden" name="game_type" value="c" />
+          <button type="submit">Pelaaja vastaan Parannettu Tekoäly</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
