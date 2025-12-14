@@ -178,7 +178,7 @@ class TestMakeMoveVsAI:
         client.post('/new_game', data={'game_type': 'c'})
 
         # Play several rounds with the same move
-        for _ in range(3):
+        for _ in range(2):
             client.post(
                 '/make_move', data={'player1_move': 'k'}, follow_redirects=True)
 
@@ -187,7 +187,7 @@ class TestMakeMoveVsAI:
         response = client.post(
             '/make_move', data={'player1_move': 'k'}, follow_redirects=True)
         assert response.status_code == 200
-        assert b'Kierros 4' in response.data
+        assert b'Kierros 3' in response.data
 
 
 class TestMultipleRounds:
@@ -230,8 +230,8 @@ class TestReset:
         """Test that reset clears session data."""
         with client.session_transaction() as session:
             session['game_type'] = 'a'
-            session['tuomari'] = {'ekan_pisteet': 5,
-                                  'tokan_pisteet': 3, 'tasapelit': 2}
+            session['tuomari'] = {'ekan_pisteet': 3,
+                                  'tokan_pisteet': 2, 'tasapelit': 2}
 
         client.get('/reset')
 
@@ -297,12 +297,12 @@ class TestGameLogic:
 
 
 class TestGameOver:
-    def test_game_ends_when_player1_gets_5_wins(self, client):
-        """Test that game ends when player 1 reaches 5 wins."""
+    def test_game_ends_when_player1_gets_3_wins(self, client):
+        """Test that game ends when player 1 reaches 3 wins."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 1 wins 5 times (k beats s)
-        for _ in range(5):
+        # Player 1 wins 3 times (k beats s)
+        for _ in range(3):
             response = client.post('/make_move', data={
                 'player1_move': 'k',
                 'player2_move': 's'
@@ -313,12 +313,12 @@ class TestGameOver:
         data = response.data.decode('utf-8')
         assert 'Peli Päättyi' in data or 'Voitti' in data
 
-    def test_game_ends_when_player2_gets_5_wins(self, client):
-        """Test that game ends when player 2 reaches 5 wins."""
+    def test_game_ends_when_player2_gets_3_wins(self, client):
+        """Test that game ends when player 2 reaches 3 wins."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 2 wins 5 times (p beats k)
-        for _ in range(5):
+        # Player 2 wins 3 times (p beats k)
+        for _ in range(3):
             response = client.post('/make_move', data={
                 'player1_move': 'k',
                 'player2_move': 'p'
@@ -329,12 +329,12 @@ class TestGameOver:
         data = response.data.decode('utf-8')
         assert 'Peli Päättyi' in data or 'Voitti' in data
 
-    def test_game_continues_before_5_wins(self, client):
-        """Test that game continues when no player has 5 wins."""
+    def test_game_continues_before_3_wins(self, client):
+        """Test that game continues when no player has 3 wins."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 1 wins 4 times
-        for _ in range(4):
+        # Player 1 wins 2 times
+        for _ in range(2):
             response = client.post('/make_move', data={
                 'player1_move': 'k',
                 'player2_move': 's'
@@ -349,8 +349,8 @@ class TestGameOver:
         """Test that game over page shows the correct winner."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 1 wins 5 times
-        for _ in range(5):
+        # Player 1 wins 3 times
+        for _ in range(3):
             client.post('/make_move', data={
                 'player1_move': 'k',
                 'player2_move': 's'
@@ -365,8 +365,8 @@ class TestGameOver:
         """Test that game over page shows final scores."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 1 wins 5 times, player 2 wins 2 times, 1 tie
-        for _ in range(5):
+        # Player 1 wins 3 times, player 2 wins 2 times, 1 tie
+        for _ in range(3):
             client.post(
                 '/make_move', data={'player1_move': 'k', 'player2_move': 's'})
         for _ in range(2):
@@ -383,8 +383,8 @@ class TestGameOver:
         """Test that play page redirects to game over after game ends."""
         client.post('/new_game', data={'game_type': 'a'})
 
-        # Player 1 wins 5 times
-        for _ in range(5):
+        # Player 1 wins 3 times
+        for _ in range(3):
             client.post(
                 '/make_move', data={'player1_move': 'k', 'player2_move': 's'})
 
@@ -397,8 +397,8 @@ class TestGameOver:
         """Test playing again with same game type after game over."""
         client.post('/new_game', data={'game_type': 'b'})
 
-        # Complete a game (5 wins for player 1)
-        for _ in range(5):
+        # Complete a game (3 wins for player 1)
+        for _ in range(3):
             client.post('/make_move', data={'player1_move': 'k'})
 
         # Start a new game of the same type
@@ -410,11 +410,11 @@ class TestGameOver:
         data = response.data.decode('utf-8')
         assert 'Valitse siirtosi' in data
 
-    def test_ai_game_ends_at_5_wins(self, client):
-        """Test that AI games also end at 5 wins."""
+    def test_ai_game_ends_at_3_wins(self, client):
+        """Test that AI games also end at 3 wins."""
         client.post('/new_game', data={'game_type': 'b'})
 
-        # Play until someone gets 5 wins
+        # Play until someone gets 3 wins
         for _ in range(20):  # Max rounds to prevent infinite loop
             response = client.post(
                 '/make_move', data={'player1_move': 'k'}, follow_redirects=True)

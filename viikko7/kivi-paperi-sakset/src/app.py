@@ -181,12 +181,12 @@ def make_move():
     session['game_history'] = history
     session.modified = True
 
-    # Check if game is over (5 wins)
-    if tuomari.ekan_pisteet >= 5:
+    # Check if game is over (3 wins)
+    if tuomari.ekan_pisteet >= 3:
         session['game_over'] = True
         session['winner'] = 'player1'
         return redirect(url_for('game_over'))
-    elif tuomari.tokan_pisteet >= 5:
+    elif tuomari.tokan_pisteet >= 3:
         session['game_over'] = True
         session['winner'] = 'player2'
         return redirect(url_for('game_over'))
